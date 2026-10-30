@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F7F5FC">
+  <title>GriefBuddy — Adaptive Mobile, Tablet & Windows</title>
+  <link rel="icon" type="image/png" href="buddy-mascot.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell" id="app-shell">
+    <!-- ==============================================================
+         ADAPTIVE TOP BAR WITH HAMBURGER MENU (MOBILE, TABLET, WINDOWS)
+         ============================================================== -->
+    <header class="app-topbar" id="app-topbar">
+      <div class="topbar-left">
+        <button class="hamburger-btn" id="hamburger-btn" onclick="toggleHamburgerMenu()" aria-label="Buka Menu Navigasi" title="Menu Navigasi">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+        <div class="topbar-brand" onclick="navigateToScreen('s04')">
+          <img src="buddy-mascot.png" alt="Buddy" class="topbar-brand-logo">
+          <div>
+            <div class="topbar-brand-name">GriefBuddy</div>
+            <div class="topbar-brand-sub" id="topbar-screen-label">Beranda</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="device-Readiness-switcher" title="Pilih tampilan layar">
+          <button class="device-mode-btn active" data-device="auto" onclick="setViewportMode('auto')">Auto</button>
+          <button class="device-mode-btn" data-device="mobile" onclick="setViewportMode('mobile')">📱 Mobile</button>
+          <button class="device-mode-btn" data-device="tablet" onclick="setViewportMode('tablet')">📟 Tablet</button>
+          <button class="device-mode-btn" data-device="windows" onclick="setViewportMode('windows')">🖥️ Windows</button>
+        </div>
+        <button class="topbar-sos-btn" onclick="navigateToScreen('s11')" title="Bantuan Krisis Darurat">🆘 SOS</button>
+        <button class="topbar-user-chip" onclick="navigateToScreen('s12')" title="Profil Pengguna">
+          <span>🌸</span>
+          <span id="topbar-user-name">Alya</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="app-body-layout">
+      <!-- Backdrop untuk Hamburger Drawer di Mobile & Tablet -->
+      <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeHamburgerMenu()"></div>
+
+      <!-- Hamburger Navigation Drawer / Sidebar -->
+      <aside class="app-sidebar-drawer" id="app-sidebar-drawer" aria-label="Menu Navigasi Utama">
+        <div class="drawer-header">
+          <div class="drawer-user-card" onclick="navigateToScreen('s12'); closeHamburgerMenuOnCompact();">
+            <div class="avatar-anonymous" style="width: 44px; height: 44px; font-size: 1.35rem; flex-shrink: 0;">🌸</div>
+            <div style="min-width: 0; flex: 1;">
+              <div class="drawer-user-name" id="drawer-user-name">Alya</div>
+              <div class="drawer-user-email" id="drawer-user-email">alya@griefbuddy.id</div>
+            </div>
+          </div>
+          <button class="drawer-close-btn" onclick="closeHamburgerMenu()" aria-label="Tutup Menu">✕</button>
+        </div>
+
+        <div class="drawer-nav-section">
+          <div class="drawer-section-label">MENU UTAMA</div>
+          <button class="drawer-nav-item active" data-screen="s04" onclick="navigateFromDrawer('s04')">
+            <span class="drawer-nav-icon">🏠</span>
+            <span>Beranda (Home)</span>
+          </button>
+          <button class="drawer-nav-item" data-screen="s05" onclick="navigateFromDrawer('s05')">
+            <span class="drawer-nav-icon">💬</span>
+            <span>AI Buddy Chat</span>
+          </button>
+          <button class="drawer-nav-item" data-screen="s07" onclick="navigateFromDrawer('s07')">
+            <span class="drawer-nav-icon">🗺️</span>
+            <span>Grief Journey Map</span>
+          </button>
+          <button class="drawer-nav-item" data-screen="s06" onclick="navigateFromDrawer('s06')">
+            <span class="drawer-nav-icon">✍️</span>
+            <span>Challenge Jurnal</span>
+          </button>
+          <button class="drawer-nav-item" data-screen="s13" onclick="navigateFromDrawer('s13')">
+            <span class="drawer-nav-icon">👥</span>
+            <span>Challenge Sosial</span>
+          </button>
+          <button class="drawer-nav-item" data-screen="s08" onclick="navigateFromDrawer('s08')">
+            <span class="drawer-nav-icon">🤝</span>
+            <span>Komunitas Sebaya</span>
+          </button>
+          <button class="drawer-nav-item" data-screen="s09" onclick="navigateFromDrawer('s09')">
+            <span class="drawer-nav-icon">📍</span>
+            <span>Support Map Malang</span>
+          </button>
+          <button class="drawer-nav-item" data-screen="s10" onclick="navigateFromDrawer('s10')">
+            <span class="drawer-nav-icon">👩‍⚕️</span>
+            <span>Konsultasi Psikolog</span>
+          </button>
+          <button class="drawer-nav-item" data-screen="s12" onclick="navigateFromDrawer('s12')">
+            <span class="drawer-nav-icon">👤</span>
+            <span>Profil & Privasi</span>
+          </button>
+        </div>
+
+        <div class="drawer-nav-section drawer-footer-section">
+          <div class="drawer-section-label">DARURAT & AKUN</div>
+          <button class="drawer-nav-item sos-item" data-screen="s11" onclick="navigateFromDrawer('s11')">
+            <span class="drawer-nav-icon">🆘</span>
+            <span>Keselamatan Utama (SOS)</span>
+          </button>
+          <button class="drawer-nav-item logout-item" data-screen="s01b" onclick="navigateFromDrawer('s01b')">
+            <span class="drawer-nav-icon">🚪</span>
+            <span>Keluar / Ganti Akun</span>
+          </button>
+        </div>
+      </aside>
+
+      <div class="screen-stage" id="screen-stage">
+            <div class="mobile-screen-pane" id="screen-s01">
+              <div class="splash-container">
+                <div id="buddy-splash-avatar"></div>
+                <h2 class="splash-logo-title">GriefBuddy</h2>
+                <div class="splash-tagline">Kamu Tidak Sendiri ♡</div>
+                <p class="splash-desc">
+                  Teman pendamping awal berbasis AI bagi remaja untuk memahami, menjalani, dan beradaptasi dengan proses kehilangan.
+                </p>
+                <button class="btn-primary" onclick="navigateToScreen('s01b')">
+                  Mulai Perjalanan 🌱
+                </button>
+                <button class="btn-secondary-link" style="margin: 10px auto 0;" onclick="navigateToScreen('s01b')">Masuk ke Akun →</button>
+              </div>
+            </div>
+
+            <!-- ==============================================================
+                 S01B: LOGIN SCREEN (NAMA PENGGUNA, EMAIL & PASSWORD)
+                 ============================================================== -->
+            <div class="mobile-screen-pane" id="screen-s01b">
+              <div class="app-screen-header">
+                <button class="header-back-btn" onclick="navigateToScreen('s01')">←</button>
+                <div class="screen-title">Masuk Akun</div>
+                <div style="width: 34px;"></div>
+              </div>
+              <div class="login-container">
+                <div class="login-card">
+                  <div class="login-header-box">
+                    <img src="buddy-mascot.png" alt="Buddy Mascot" class="login-mascot-img anim-breathe">
+                    <h3 class="login-title">Halo, Selamat Datang! 💜</h3>
+                    <p class="login-subtitle">
+                      Silakan masuk menggunakan nama pengguna, email, dan password untuk memulai ruang amanmu.
+                    </p>
+                  </div>
+
+                  <form class="login-form" onsubmit="event.preventDefault(); handleLoginSubmit('s02');">
+                    <div class="login-field-group">
+                      <label for="login-username" class="login-label">Nama Pengguna</label>
+                      <div class="login-input-wrap">
+                        <span class="login-input-icon">👤</span>
+                        <input
+                          type="text"
+                          id="login-username"
+                          class="login-input"
+                          placeholder="Masukkan nama pengguna (mis. Alya)"
+                          required
+                        >
+                      </div>
+                    </div>
+
+                    <div class="login-field-group">
+                      <label for="login-email" class="login-label">Email</label>
+                      <div class="login-input-wrap">
+                        <span class="login-input-icon">✉️</span>
+                        <input
+                          type="email"
+                          id="login-email"
+                          class="login-input"
+                          placeholder="nama@email.com"
+                          required
+                        >
+                      </div>
+                    </div>
+
+                    <div class="login-field-group">
+                      <label for="login-password" class="login-label">Password</label>
+                      <div class="login-input-wrap">
+                        <span class="login-input-icon">🔒</span>
+                        <input
+                          type="password"
+                          id="login-password"
+                          class="login-input"
+                          placeholder="Masukkan password"
+                          required
+                        >
+                        <button type="button" class="login-pw-toggle" onclick="togglePasswordVisibility()" aria-label="Tampilkan password" id="login-pw-toggle-btn">👁️</button>
+                      </div>
+                    </div>
+
+                    <div id="login-error-msg" class="login-error-msg" style="display: none;"></div>
+
+                    <button type="submit" class="btn-primary" style="margin-top: 6px;">
+                      Masuk & Lanjut Onboarding 🌱
+                    </button>
+                    <button type="button" class="btn-secondary" style="font-size: 0.8rem; padding: 11px 16px;" onclick="handleLoginSubmit('s04')">
+                      Masuk & Langsung ke Beranda →
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- ==============================================================
+                 S02: ONBOARDING & CONSENT
+                 ============================================================== -->
+            <div class="mobile-screen-pane" id="screen-s02">
+              <div class="app-screen-header">
+                <button class="header-back-btn" onclick="navigateToScreen('s01b')">←</button>
+                <div class="screen-title">Selamat Datang</div>
+                <div style="width: 34px;"></div>
+              </div>
+              <div class="onboarding-container">
+                <div class="onboarding-card">
+                  <div>
+                    <img src="buddy-mascot.png" alt="Buddy Mascot" class="onboarding-mascot-img anim-breathe">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.15rem; color: var(--primary-deep); margin-bottom: 8px;">
+                      Ruang Aman & Tenang Untukmu
+                    </h3>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;">
+                      GriefBuddy hadir sebagai <strong>early support</strong>, bukan pengganti psikolog atau keluarga. Buddy adalah karakter pendamping non-manusia yang siap mendengarkan tanpa menghakimi.
+                    </p>
+                  </div>
+
+                  <div class="consent-box">
+                    <input type="checkbox" id="onboarding-consent-check" checked>
+                    <label for="onboarding-consent-check">
+                      Saya memahami bahwa GriefBuddy adalah platform pendampingan mandiri, bukan layanan gawat darurat medis atau diagnosis klinis. Data saya dienkripsi secara privat.
+                    </label>
+                  </div>
+
+                  <button class="btn-primary" onclick="navigateToScreen('s03')">
+                    Lanjut ke Asesmen Awal →
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ==============================================================
+                 S03: INITIAL ASSESSMENT (BEQ-24)
+                 ============================================================== -->
+            <div class="mobile-screen-pane" id="screen-s03">
+              <div class="app-screen-header">
+                <button class="header-back-btn" onclick="navigateToScreen('s02')">←</button>
+                <div>
+                  <div class="screen-title">Asesmen Awal</div>
+                  <div class="screen-subtitle" id="assess-count-label">Langkah 1 dari 4</div>
+                </div>
+                <div style="width: 34px;"></div>
+              </div>
+
+              <div class="assessment-container">
+                <div class="progress-bar-wrap">
+                  <div class="progress-bar-fill" id="assess-progress-fill"></div>
+                </div>
+
+                <div class="assessment-card" id="assess-card-content">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+            </div>
+
+            <!-- ==============================================================
+                 S04: HOME DASHBOARD
+                 ============================================================== -->
+            <div class="mobile-screen-pane" id="screen-s04">
+              <div class="home-container">
+                <div class="home-top">
+                  <div>
+                    <div class="home-date" id="home-date"></div>
+                    <h2 class="home-hello" id="home-hello-text">Hai, Alya 💜</h2>
+                  </div>
+                  <div class="home-top-actions">
+                    <button class="icon-btn sos" onclick="navigateToScreen('s11')" aria-label="Butuh bantuan">🆘</button>
+                    <button class="icon-btn" onclick="navigateToScreen('s12')" aria-label="Profil">👤</button>
+                  </div>
+                </div>
+
+                <div class="home-hero">
+                  <div id="buddy-home-avatar"></div>
+                  <p class="home-hero-hint">Ketuk Buddy atau pilih interaksi lucu di bawah ✨</p>
+                  <div class="buddy-action-pills">
+                    <button type="button" class="buddy-action-pill" onclick="BuddyMascot.performAction('pet', 'buddy-home-avatar')">🤚 Elus</button>
+                    <button type="button" class="buddy-action-pill" onclick="BuddyMascot.performAction('hug', 'buddy-home-avatar')">🫂 Peluk</button>
+                    <button type="button" class="buddy-action-pill" onclick="BuddyMascot.performAction('dance', 'buddy-home-avatar')">🎶 Goyang</button>
+                    <button type="button" class="buddy-action-pill" onclick="BuddyMascot.performAction('cheer', 'buddy-home-avatar')">🌱 Semangat</button>
+                  </div>
+                </div>
+
+                <div class="home-card">
+                  <div class="home-card-title">Apa yang kamu rasakan hari ini?</div>
+                  <div class="mood-emojis-row">
+                    <button class="mood-btn" data-mood="very-sad" onclick="setTodayMood('very-sad')"><span class="emoji-icon">😢</span><span class="mood-label">Terpuruk</span></button>
+                    <button class="mood-btn selected" data-mood="sad" onclick="setTodayMood('sad')"><span class="emoji-icon">😔</span><span class="mood-label">Sedih</span></button>
+                    <button class="mood-btn" data-mood="neutral" onclick="setTodayMood('neutral')"><span class="emoji-icon">😐</span><span class="mood-label">Biasa</span></button>
+                    <button class="mood-btn" data-mood="good" onclick="setTodayMood('good')"><span class="emoji-icon">🙂</span><span class="mood-label">Lumayan</span></button>
+                    <button class="mood-btn" data-mood="very-good" onclick="setTodayMood('very-good')"><span class="emoji-icon">😊</span><span class="mood-label">Baik</span></button>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="home-section-title">Challenge untukmu</div>
+                  <div class="challenge-tiles">
+                    <button class="challenge-tile social" onclick="navigateToScreen('s13')">
+                      <span class="tile-ic">👥</span><b>Challenge Sosial</b><small id="home-social-progress">0 dari 4 selesai</small>
+                    </button>
+                    <button class="challenge-tile journal" onclick="navigateToScreen('s06')">
+                      <span class="tile-ic">✍️</span><b>Challenge Jurnal</b><small id="home-journal-count">0 catatan</small>
+                    </button>
+                  </div>
+                </div>
+
+                <button class="home-journey-strip" onclick="navigateToScreen('s07')">
+                  <span class="tile-ic">🗺️</span>
+                  <span class="strip-text"><b>Perjalananmu</b><small id="home-journey-text"></small></span>
+                  <span class="strip-arrow">›</span>
+                </button>
+
+                <div class="home-mini-grid">
+                  <button class="mini-tile" onclick="navigateToScreen('s05')"><span>💬</span>Chat Buddy</button>
+                  <button class="mini-tile" onclick="navigateToScreen('s08')"><span>🤝</span>Komunitas</button>
+                  <button class="mini-tile" onclick="navigateToScreen('s09')"><span>📍</span>Bantuan Terdekat</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ==============================================================
+                 S05: AI BUDDY CHAT
+                 ============================================================== -->
+            <div class="mobile-screen-pane" id="screen-s05">
+              <div class="app-screen-header">
+                <button class="header-back-btn" onclick="navigateToScreen('s04')">←</button>
+                <div style="text-align: center;">
+                  <div class="screen-title">AI Buddy Chat</div>
+                  <div class="screen-subtitle" style="color: var(--accent-green); font-weight: 600;">● Online & Mendengarkan</div>
+                </div>
+                <button class="chat-mascot-toggle-btn" onclick="toggleMascotInChat()">
+                  <img src="buddy-mascot.png" alt="" class="btn-mascot-mini"> Buddy
+                </button>
+              </div>
+
+              <!-- Communication Mode Switcher (PRD F02) -->
+              <div class="chat-mode-bar">
+                <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">Mode Gaya:</span>
+                <div class="mode-pill-group">
+                  <button class="chat-mode-chip active" data-mode="comforting" onclick="setChatMode('comforting')">
+                    Comforting
+                  </button>
+                  <button class="chat-mode-chip" data-mode="feedback" onclick="setChatMode('feedback')">
+                    Feedback
+                  </button>
+                  <button class="chat-mode-chip" data-mode="informative" onclick="setChatMode('informative')">
+                    Informative
+                  </button>
+                </div>
+              </div>
+
+              <!-- Mascot Visual Companion in Chat -->
+              <div class="chat-mascot-preview-area" id="chat-mascot-preview-area">
+                <div id="buddy-chat-mascot-box"></div>
+              </div>
+
+              <!-- Messages List -->
+              <div class="chat-messages-area" id="chat-messages-container">
+                <!-- Dynamically populated by JS -->
+              </div>
+
+              <!-- Quick Response Chips -->
+              <div class="chat-quick-chips">
+                <button class="quick-chip-btn" onclick="sendChatMessage('Hari ini aku merasa sendiri banget...')">
+                  Aku merasa sendiri 🍂
+                </button>
+                <button class="quick-chip-btn" onclick="sendChatMessage('Aku pengen cerita ke temen tapi bingung mulainya.')">
+                  Pengen cerita ke teman 💭
+                </button>
+                <button class="quick-chip-btn" onclick="sendChatMessage('Ajari aku latihan pernapasan untuk menenangkan diri.')">
+                  Bantu aku rileks 🧘
+                </button>
+                <button class="quick-chip-btn" onclick="sendChatMessage('Apakah wajar kalau aku kadang merasa marah?')">
+                  Apakah wajar marah? ❓
+                </button>
+              </div>
+
+              <!-- Live Risk Detection Banner -->
+              <div class="chat-live-risk-alert" id="chat-live-risk-alert" style="display: none;">
+                <div class="chat-live-risk-content">
+                  <span>🚨 <strong>Peringatan Keselamatan:</strong> Kamu tidak sendirian. Jika kamu merasa ingin menyakiti diri, bantuan profesional tersedia sekarang.</span>
+                  <button class="chat-live-risk-btn" onclick="showRiskAlertModal()">Butuh Bantuan Darurat</button>
+                </div>
+              </div>
+
+              <!-- Input Bar -->
+              <div class="chat-input-bar">
+                <input type="text" id="chat-input-field" class="chat-text-input" placeholder="Ketik perasaanmu di sini..." oninput="checkLiveRiskInput(this.value)" onkeypress="if(event.key === 'Enter') sendChatMessage()">
+                <button class="chat-send-btn" onclick="sendChatMessage()">➤</button>
+              </div>
+            </div>
+
+            <!-- ==============================================================
+                 S06: GRIEF JOURNAL
+                 ============================================================== -->
+            <div class="mobile-screen-pane" id="screen-s06">
+              <div class="app-screen-header">
+                <button class="header-back-btn" onclick="navigateToScreen('s05')">←</button>
+                <div class="screen-title">Challenge Jurnal</div>
+                <div style="width: 34px;"></div>
+              </div>
+
+              <div class="journal-container">
+                <div class="journal-prompt-card">
+                  <div class="prompt-tag">✍️ Challenge Jurnal</div>
+                  <div class="prompt-text">"Tulis apa saja yang sedang kamu rasakan sekarang."</div>
+                  <p style="font-size: 0.72rem; color: #7B4B32;">Tidak harus rapi, tidak harus panjang, dan tidak ada jawaban yang salah. Tuliskan apa adanya.</p>
+                </div>
+
+                <div>
+                  <div style="font-size: 0.74rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">Perasaanmu saat ini</div>
+                  <div class="journal-mood-row">
+                    <button class="journal-mood-btn" data-mood="very-sad" onclick="setJournalMood('very-sad')">😭</button>
+                    <button class="journal-mood-btn" data-mood="sad" onclick="setJournalMood('sad')">😢</button>
+                    <button class="journal-mood-btn" data-mood="neutral" onclick="setJournalMood('neutral')">😐</button>
+                    <button class="journal-mood-btn" data-mood="good" onclick="setJournalMood('good')">🙂</button>
+                    <button class="journal-mood-btn" data-mood="very-good" onclick="setJournalMood('very-good')">😊</button>
+                  </div>
+                </div>
+
+                <textarea class="journal-textarea" id="journal-input-text" placeholder="Aku sedang merasa..." oninput="updateJournalWordCount()"></textarea>
+                <div id="journal-word-count" style="font-size: 0.68rem; color: var(--text-muted); text-align: right; margin-top: -8px;">0 kata</div>
+
+                <button class="btn-primary" onclick="saveJournalEntry()">
+                  Simpan Jurnal ✨
+                </button>
+
+                <div>
+                  <h4 style="font-family: var(--font-heading); font-size: 0.85rem; color: var(--primary-deep); margin-bottom: 8px;">
+                    Catatan Sebelumnya
+                  </h4>
+                  <div class="journal-history-list" id="journal-history-container"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ==============================================================
+                 S07: GRIEF JOURNEY MAP (ESSAY PAGE 16 SPEC)
+                 ============================================================== -->
+            <div class="mobile-screen-pane" id="screen-s07">
+              <div class="app-screen-header">
+                <button class="header-back-btn" onclick="navigateToScreen('s04')">←</button>
+                <div style="text-align: center;">
+                  <div class="screen-title">Grief Journey Map</div>
+                  <div class="screen-subtitle">Perjalanan Tidak Harus Linear</div>
+                </div>
+                <div style="width: 34px;"></div>
+              </div>
+              <div class="journey-map-container">
+                <div class="journey-legend">
+                  <span><i class="lg dot"></i>Sesi selesai</span>
+                  <span><i class="lg cur"></i>Posisimu</span>
+                  <span><i class="lg dash"></i>Kembali ke fase sebelumnya</span>
+                </div>
+                <div class="journey-canvas-wrap" id="journey-map-canvas"></div>
+                <div class="journey-node-card-active" id="journey-active-node-card"></div>
+              </div>
+            </div>
+
+            <!-- ==============================================================
+                 S08: PEER SUPPORT COMMUNITY
+                 ============================================================== -->
+            <div class="mobile-screen-pane" id="screen-s08">
+              <div class="app-screen-header">
+                <button class="header-back-btn" onclick="navigateToScreen('s04')">←</button>
+                <div class="screen-title">Komunitas Sebaya</div>
+                <button class="btn-primary" style="width: auto; padding: 6px 12px; font-size: 0.72rem;" onclick="createNewCommunityPost()">
+                  + Tulis
+                </button>
+              </div>
+
+              <div class="community-container">
+                <div class="community-filter-chips">
+                  <button class="feed-filter-chip active">Semua Cerita</button>
+                  <button class="feed-filter-chip">Kehilangan Ibu</button>
+                  <button class="feed-filter-chip">Kehilangan Ayah</button>
+                  <button class="feed-filter-chip">Saudara</button>
+                </div>
+
+                <div style="background: var(--primary-soft); padding: 10px 14px; border-radius: 14px; font-size: 0.72rem; color: var(--primary-deep); display: flex; align-items: center; gap: 8px;">
+                  <span>🛡️</span>
+                  <span><strong>Ruang Aman:</strong> Dimoderasi oleh AI NLP untuk mencegah ujaran kebencian & menjaga privasi anonimmu.</span>
+                </div>
+
+                <div id="community-feed-container" style="display: flex; flex-direction: column; gap: 12px;">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+            </div>
+
+            <!-- ==============================================================
+                 S09: SUPPORT MAP (MALANG & INDONESIA)
+                 ============================================================== -->
+            <div class="mobile-screen-pane" id="screen-s09">
+              <div class="app-screen-header">
+                <button class="header-back-btn" onclick="navigateToScreen('s04')">←</button>
+                <div class="screen-title">Support Map Malang</div>
+                <div style="width: 34px;"></div>
+              </div>
+
+              <div class="support-container">
+                <!-- Visual Map Simulator Graphic -->
+                <div class="mock-map-view">
+                  <svg width="100%" height="100%" viewBox="0 0 360 200" fill="none">
+                    <rect width="360" height="200" fill="#E4E9ED"/>
+                    <!-- Road Paths -->
+                    <path d="M 0 60 Q 180 80 360 40" stroke="#FFFFFF" stroke-width="12"/>
+                    <path d="M 120 0 L 140 200" stroke="#FFFFFF" stroke-width="10"/>
+                    <path d="M 240 0 L 220 200" stroke="#FFFFFF" stroke-width="8"/>
+                    <!-- Map Pin 1: UB -->
+                    <g transform="translate(130, 70)" onclick="navigateToScreen('s10')" style="cursor: pointer;">
+                      <circle cx="0" cy="0" r="16" fill="#9A91C8" opacity="0.3"/>
+                      <circle cx="0" cy="0" r="9" fill="#584A86"/>
+                      <text x="0" y="3" fill="#FFF" font-size="8" text-anchor="middle" font-weight="700">UB</text>
+                    </g>
+                    <!-- Map Pin 2: RSSA -->
+                    <g transform="translate(230, 110)">
+                      <circle cx="0" cy="0" r="8" fill="#E74C3C"/>
+                    </g>
+                  </svg>
+                  <div style="position: absolute; bottom: 8px; left: 12px; background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: 20px; font-size: 0.68rem; font-weight: 600; color: var(--primary-deep)">
+                    📍 Sekitar Kota Malang, Jawa Timur
+                  </div>
+                </div>
+
+                <div class="support-services-list">
+                  <div class="service-item-card" onclick="navigateToScreen('s10')">
+                    <div>
+                      <div style="font-size: 0.68rem; color: var(--primary-lavender); font-weight: 700;">PSIKOLOG KLINIS</div>
+                      <div style="font-family: var(--font-heading); font-size: 0.88rem; font-weight: 700; color: var(--primary-deep);">
+                        Klinik Psikologi Universitas Brawijaya
+                      </div>
+                      <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">
+                        📍 1.2 km • Grief & Remaja • Tersedia
+                      </div>
+                    </div>
+                    <button class="btn-primary" style="width: auto; padding: 6px 14px; font-size: 0.75rem;">Lihat</button>
+                  </div>
+
+                  <div class="service-item-card">
+                    <div>
+                      <div style="font-size: 0.68rem; color: #D9534F; font-weight: 700;">RUMAH SAKIT UMUM</div>
+                      <div style="font-family: var(--font-heading); font-size: 0.88rem; font-weight: 700; color: var(--primary-deep);">
+                        Poli Jiwa RSUD Dr. Saiful Anwar
+                      </div>
+                      <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">
+                        📍 2.8 km • Layanan Rujukan Medis
+                      </div>
+                    </div>
+                    <button class="btn-secondary" style="width: auto; padding: 6px 14px; font-size: 0.75rem;">Info</button>
+                  </div>
+
+                  <div class="service-item-card" style="border-left: 4px solid #E74C3C;">
+                    <div>
+                      <div style="font-size: 0.68rem; color: #E74C3C; font-weight: 700;">HOTLINE DARURAT 24 JAM</div>
+                      <div style="font-family: var(--font-heading); font-size: 0.88rem; font-weight: 700; color: var(--primary-deep);">
+                        Layanan SEJIWA (Kemenkes)
+                      </div>
+                      <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">
+                        📞 Bebas Pulsa: 119 Ext. 8
+                      </div>
+                    </div>
+                    <a href="tel:119" class="btn-primary" style="width: auto; padding: 6px 14px; font-size: 0.75rem; text-decoration: none; background: #E74C3C;">Panggil</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ==============================================================
+                 S10: PROFESSIONAL REFERRAL DETAIL
+                 ============================================================== -->
+            <div class="mobile-screen-pane" id="screen-s10">
+              <div class="app-screen-header">
+                <button class="header-back-btn" onclick="navigateToScreen('s09')">←</button>
+                <div class="screen-title">Detail Profesional</div>
+                <div style="width: 34px;"></div>
+              </div>
+
+              <div class="prof-detail-container">
+                <div class="psychologist-hero-card">
+                  <div class="psychologist-avatar">👩‍⚕️</div>
+                  <div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.1rem; color: var(--primary-deep);">
+                      Dra. Rismayanti, M.Psi., Psikolog
+                    </h3>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">
+                      Psikolog Klinis Anak & Remaja • SIP: 440/128/PSI/2024
+                    </div>
+                  </div>
+                  <div style="display: flex; gap: 8px; margin-top: 4px;">
+                    <span class="post-tag-badge" style="background: var(--primary-soft); color: var(--primary-dark)">🧠 Grief & Bereavement</span>
+                    <span class="post-tag-badge" style="background: var(--accent-green-soft); color: var(--accent-green)">🟢 Available</span>
+                  </div>
+                </div>
+
+                <div style="background: white; border-radius: 20px; padding: 18px; border: 1px solid var(--border-light); font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary);">
+                  <strong style="color: var(--primary-deep); display: block; margin-bottom: 6px;">Tentang Psikolog:</strong>
+                  Berpengalaman lebih dari 8 tahun mendampingi remaja yang mengalami kedukaan dan kehilangan anggota keluarga. Pendekatan berbasis Cognitive Behavioral Therapy (CBT) dan Acceptance and Commitment Therapy (ACT).
+                </div>
+
+                <button class="btn-primary" onclick="openConsultationModal()">
+                  Buat Jadwal Konsultasi (Tatap Muka / Online) 💜
+                </button>
+              </div>
+            </div>
+
+            <!-- ==============================================================
+                 S11: SAFETY INTERVENTION (RISK DETECTION)
+                 ============================================================== -->
+            <div class="mobile-screen-pane" id="screen-s11">
+              <div class="app-screen-header">
+                <button class="header-back-btn" onclick="navigateToScreen('s04')">←</button>
+                <div class="screen-title" style="color: #D9534F;">Keselamatan Utama</div>
+                <div style="width: 34px;"></div>
+              </div>
+
+              <div class="safety-screen-container">
+                <div class="safety-alert-banner">
+                  <img src="buddy-mascot.png" alt="Buddy" style="width: 44px; height: 44px; object-fit: contain; flex-shrink: 0;">
+                  <div>
+                    <strong style="color: #C0392B; font-size: 0.88rem; display: block; margin-bottom: 4px;">
+                      Kami Peduli & Mendengarkan Rasa Sakitmu
+                    </strong>
+                    <p style="font-size: 0.76rem; color: #7F2B2B; line-height: 1.45;">
+                      Kamu tidak harus menanggung beban seberat ini sendirian. Ada bantuan yang siap mendampingimu saat ini juga tanpa dihakimi.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Grounding Technique 5-4-3-2-1 -->
+                <div style="background: white; border-radius: 20px; padding: 16px; border: 1px solid var(--border-light);">
+                  <strong style="font-size: 0.82rem; color: var(--primary-deep); display: block; margin-bottom: 6px;">
+                    🌿 Latihan Grounding Singkat (Tarik Napas Pelan)
+                  </strong>
+                  <ul style="font-size: 0.76rem; color: var(--text-secondary); line-height: 1.6; padding-left: 18px;">
+                    <li>Sebutkan <strong>5 benda</strong> yang kamu lihat di sekitarmu</li>
+                    <li>Sebutkan <strong>4 benda</strong> yang bisa kamu sentuh</li>
+                    <li>Sebutkan <strong>3 suara</strong> yang bisa kamu dengar</li>
+                    <li>Sebutkan <strong>2 aroma</strong> di sekitarmu</li>
+                    <li>Sebutkan <strong>1 hal baik</strong> tentang dirimu</li>
+                  </ul>
+                </div>
+
+                <!-- Emergency Hotlines -->
+                <div class="safety-hotline-card">
+                  <div style="font-size: 0.82rem; font-weight: 700; color: #C0392B;">
+                    Bantuan Krisis Cepat (24 Jam & Gratis):
+                  </div>
+                  
+                  <a href="tel:119" class="hotline-btn">
+                    📞 Hubungi SEJIWA (119 Ext. 8)
+                  </a>
+
+                  <div style="display: flex; gap: 8px; margin-top: 4px;">
+                    <a href="https://www.intothelightid.org" target="_blank" class="btn-secondary" style="font-size: 0.75rem; text-decoration: none; text-align: center; border-color: #F8B4B4;">
+                      Into The Light ID
+                    </a>
+                    <button class="btn-secondary" style="font-size: 0.75rem;" onclick="alert('Membuka kontak darurat keluarga: Ibu Pengasuh / Guru BK')">
+                      Kontak Tepercaya
+                    </button>
+                  </div>
+                </div>
+
+                <button class="btn-secondary" onclick="navigateToScreen('s04')">
+                  Kembali ke Beranda
+                </button>
+              </div>
+            </div>
+
+            <!-- ==============================================================
+                 S13: CHALLENGE SOSIAL
+                 ============================================================== -->
+            <div class="mobile-screen-pane" id="screen-s13">
+              <div class="app-screen-header">
+                <button class="header-back-btn" onclick="navigateToScreen('s05')">←</button>
+                <div class="screen-title">Challenge Sosial</div>
+                <div style="width: 34px;"></div>
+              </div>
+
+              <div class="journal-container">
+                <div class="journal-prompt-card" style="background: linear-gradient(135deg, var(--accent-green-soft) 0%, #FFFFFF 100%); border-color: #CFE5D4;">
+                  <div class="prompt-tag" style="color: #3B7A49;">👥 Challenge Sosial</div>
+                  <div class="prompt-text" style="color: #1F4A2B;">Pilih satu kegiatan kecil bareng orang lain.</div>
+                  <p style="font-size: 0.72rem; color: #3B6A47;">Tujuannya bukan melupakan, tapi memberi pikiranmu ruang untuk beristirahat sejenak. Pilih yang terasa paling mungkin kamu lakukan hari ini.</p>
+                </div>
+
+                <div>
+                  <div id="social-progress-label" style="font-size: 0.72rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">0 dari 4 challenge selesai</div>
+                  <div class="social-progress-track"><div class="social-progress-fill" id="social-progress-fill"></div></div>
+                </div>
+
+                <div class="social-task-list" id="social-challenge-list"></div>
+
+                <button class="btn-secondary" onclick="navigateToScreen('s08')">
+                  Atau ceritakan ke Komunitas Sebaya 👥
+                </button>
+              </div>
+            </div>
+
+            <!-- ==============================================================
+                 S12: PROFILE & PRIVACY
+                 ============================================================== -->
+            <div class="mobile-screen-pane" id="screen-s12">
+              <div class="app-screen-header">
+                <button class="header-back-btn" onclick="navigateToScreen('s04')">←</button>
+                <div class="screen-title">Profil & Privasi</div>
+                <div style="width: 34px;"></div>
+              </div>
+
+              <div class="profile-container">
+                <div class="profile-card">
+                  <div class="avatar-anonymous" style="width: 52px; height: 52px; font-size: 1.6rem;">🌸</div>
+                  <div style="flex: 1;">
+                    <h3 id="profile-display-name" style="font-family: var(--font-heading); font-size: 1rem; color: var(--primary-deep)">
+                      Alya Bintang
+                    </h3>
+                    <div id="profile-display-email" style="font-size: 0.75rem; color: var(--primary-dark); font-weight: 500; margin-top: 2px;">
+                      alya@griefbuddy.id
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">
+                      Remaja (17 tahun) • Malang • ID: #GB-8921
+                    </div>
+                  </div>
+                </div>
+
+                <div style="background: white; border-radius: 20px; padding: 18px; border: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 10px;">
+                  <strong style="font-size: 0.84rem; color: var(--primary-deep)">Grief Profile (BEQ-24):</strong>
+                  <div style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5;">
+                    • <strong>Guilt / Blame / Anger:</strong> Rendah (Skor 8/25)<br>
+                    • <strong>Existential Loss:</strong> Sedang (Skor 16/25)<br>
+                    • <strong>Preoccupation:</strong> Tinggi (Skor 22/25)
+                  </div>
+                  <button class="btn-secondary" style="font-size: 0.75rem; padding: 8px 12px; margin-top: 4px;" onclick="navigateToScreen('s03')">
+                    Ulangi Asesmen Awal 🔄
+                  </button>
+                </div>
+
+                <div style="background: white; border-radius: 20px; padding: 18px; border: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 8px;">
+                  <strong style="font-size: 0.84rem; color: var(--primary-deep)">Keamanan & Privasi:</strong>
+                  <div style="font-size: 0.76rem; color: var(--text-secondary); line-height: 1.5;">
+                    🔐 <strong>Enkripsi End-to-End:</strong> Seluruh riwayat obrolan dan jurnal tersimpan aman.<br>
+                    🎭 <strong>Mode Anonim:</strong> Identitas aslimu disamarkan di Komunitas Sebaya.
+                  </div>
+                  <button class="btn-secondary" style="font-size: 0.75rem; padding: 8px 12px; margin-top: 6px; color: #C0392B; border-color: #F5B7B1;" onclick="navigateToScreen('s01b')">
+                    Keluar / Ganti Akun 🚪
+                  </button>
+                </div>
+              </div>
+            </div>
+
+      </div>
+    </div>
+    <nav class="app-bottom-nav" id="app-bottom-nav">
+            <button class="nav-tab-item active" data-tab="home" onclick="navigateToScreen('s04')">
+              <span class="nav-icon">🏠</span>
+              <span>Home</span>
+            </button>
+            <button class="nav-tab-item" data-tab="chat" onclick="navigateToScreen('s05')">
+              <span class="nav-icon">💬</span>
+              <span>Chat AI</span>
+            </button>
+            <button class="nav-tab-item" data-tab="journey" onclick="navigateToScreen('s07')">
+              <span class="nav-icon">🗺️</span>
+              <span>Journey</span>
+            </button>
+            <button class="nav-tab-item" data-tab="community" onclick="navigateToScreen('s08')">
+              <span class="nav-icon">👥</span>
+              <span>Komunitas</span>
+            </button>
+            <button class="nav-tab-item" data-tab="profile" onclick="navigateToScreen('s12')">
+              <span class="nav-icon">👤</span>
+              <span>Profil</span>
+            </button>
+          </nav>
+  </div>
+
+  <div class="proto-modal-overlay" id="proto-modal">
+    <div class="proto-modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 10px;">
+        <h3 id="modal-title" style="font-family: var(--font-heading); font-size: 1.05rem; color: var(--primary-deep);">Modal Title</h3>
+        <button onclick="closeModal()" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted);">✕</button>
+      </div>
+      <div id="modal-body">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  
+  <script src="buddy-mascot.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
